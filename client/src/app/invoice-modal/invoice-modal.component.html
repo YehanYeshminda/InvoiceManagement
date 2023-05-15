@@ -1,0 +1,39 @@
+<div class="container p-5">
+  <form [formGroup]="form" autocomplete="off">
+    <div class="row">
+      <div class="col-6">
+        <app-text-input
+          [label]="'Invoice Number'"
+          [formControl]="$any(form.controls['invoiceNo'])"
+        ></app-text-input>
+      </div>
+
+      <div class="col-6">
+        <app-text-input
+          [label]="'Item'"
+          [formControl]="$any(form.controls['item'])"
+        ></app-text-input>
+      </div>
+
+      <div class="col-6">
+        <app-text-input
+          [label]="'Rate'"
+          [formControl]="$any(form.controls['rate'])"
+        ></app-text-input>
+      </div>
+
+      <div class="col-6">
+        <app-text-input
+          [label]="'Qty'"
+          [formControl]="$any(form.controls['qty'])"
+        ></app-text-input>
+      </div>
+
+      <div class="col-12 mt-3 d-flex justify-content-center align-items-center">
+        <button class="btn btn-primary w-50" (click)="updateInvoiceD()">
+          Edit
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -10,9 +10,12 @@ namespace API.Interfaces
         Task<ActionResult<IEnumerable<TblInvoiceH>>> GetInvoicesH();
         Task<TblInvoiceD> GetInvoiceD(int id);
         Task<TblInvoiceH> GetInvoiceH(string id);
+        Task<TblInvoiceD> GetInvoiceD(string id);
         void AddInvoiceH(TblInvoiceH invoiceH);
         void AddInvoiceD(TblInvoiceD invoiceD);
         Task<bool> SaveAllAsync();
         void UpdateTblH(TblInvoiceH tblInvoiceH);
+        void UpdateTblD(TblInvoiceD tblInvoiceD);
+        void DeleteInvoiceD(TblInvoiceD invoiceD);
     }
 }

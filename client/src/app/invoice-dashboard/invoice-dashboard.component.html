@@ -1,0 +1,100 @@
+<div class="container">
+  <form [formGroup]="form" autocomplete="off">
+    <div class="row">
+      <div class="col-6">
+        <app-text-input
+          [label]="'Invoice Number'"
+          [formControl]="$any(form.controls['invoiceNo'])"
+        ></app-text-input>
+      </div>
+
+      <div class="col-6">
+        <app-date-picker
+          [label]="'Date'"
+          [formControl]="$any(form.controls['date'])"
+        ></app-date-picker>
+      </div>
+
+      <div class="col-6">
+        <app-text-input
+          [label]="'Total Amount'"
+          [formControl]="$any(form.controls['totalAmount'])"
+        ></app-text-input>
+      </div>
+
+      <div class="col-12 mt-3">
+        <button class="btn btn-primary w-25" (click)="saveInvoice()">
+          Save
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <div class="mt-4"></div>
+  <table class="table" *ngIf="invoiceD$ | async as member">
+    <thead>
+      <tr>
+        <th scope="col">Invoice No</th>
+        <th scope="col">Item</th>
+        <th scope="col">Rate</th>
+        <th scope="col">Qty</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody *ngFor="let item of member">
+      <tr>
+        <td>{{ item.invoiceNo }}</td>
+        <td>{{ item.item }}</td>
+        <td>{{ item.rate }}</td>
+        <td>{{ item.qty }}</td>
+        <td>
+          <button
+            class="btn btn-secondary"
+            (click)="deleteItem(item.id, item.invoiceNo)"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="mt-5"></div>
+  <form [formGroup]="formInvoiceD" autocomplete="off">
+    <div class="row">
+      <div class="col-6">
+        <app-text-input
+          [label]="'Item'"
+          [formControl]="$any(formInvoiceD.controls['item'])"
+        ></app-text-input>
+      </div>
+
+      <div class="col-6">
+        <app-text-input
+          [label]="'Rate'"
+          [formControl]="$any(formInvoiceD.controls['rate'])"
+        ></app-text-input>
+      </div>
+
+      <div class="col-6">
+        <app-text-input
+          [label]="'Qty'"
+          [formControl]="$any(formInvoiceD.controls['qty'])"
+        ></app-text-input>
+      </div>
+
+      <div class="row mt-3">
+        <div class="col-6">
+          <label class="fw-bolder">Total Amount:</label>
+          <label class="ms-3 fw-bold">{{ totalAmount }}</label>
+        </div>
+      </div>
+
+      <div class="col-12 mt-3">
+        <button class="btn btn-primary w-25" (click)="saveInvoiceD()">
+          Save
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

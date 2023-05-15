@@ -27,13 +27,19 @@ namespace API.Repositories
 
         public async Task<TblInvoiceD> GetInvoiceD(int id)
         {
-            var invoiceD = await _context.TblInvoiceDs.SingleOrDefaultAsync(x => x.Id == id);
+            var invoiceD = await _context.TblInvoiceDs.FindAsync(id);
             return invoiceD;
         }
 
         public async Task<TblInvoiceH> GetInvoiceH(string id)
         {
             var invoiceH = await _context.TblInvoiceHs.FirstOrDefaultAsync(x => x.InvoiceNo == id);
+            return invoiceH;
+        }
+
+        public async Task<TblInvoiceD> GetInvoiceD(string id)
+        {
+            var invoiceH = await _context.TblInvoiceDs.FirstOrDefaultAsync(x => x.InvoiceNo == id);
             return invoiceH;
         }
 
@@ -52,9 +58,19 @@ namespace API.Repositories
             return await _context.SaveChangesAsync() > 0;
         }
 
+        public void UpdateTblD(TblInvoiceD tblInvoiceD)
+        {
+            _context.Entry(tblInvoiceD).State = EntityState.Modified;
+        }
+
         public void UpdateTblH(TblInvoiceH tblInvoiceH)
         {
             _context.Entry(tblInvoiceH).State = EntityState.Modified;
+        }
+
+        public void DeleteInvoiceD(TblInvoiceD invoiceD)
+        {
+            _context.TblInvoiceDs.Remove(invoiceD);
         }
     }
 }

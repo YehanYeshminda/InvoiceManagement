@@ -45,6 +45,13 @@ namespace API.Controllers
                 return BadRequest();
             }
 
+            var alreadyInvoiceWithRegNo = await _invoiceInterface.GetInvoiceH(invoiceH.InvoiceNo);
+
+            if (alreadyInvoiceWithRegNo != null)
+            {
+                return BadRequest("Already Invoice No exist");
+            }
+
             var invoice = new TblInvoiceH
             {
                 InvoiceNo = invoiceH.InvoiceNo,
@@ -76,17 +83,20 @@ namespace API.Controllers
 
             var invoice = new TblInvoiceD
             {
-                InvoiceNo= invoiceHNo.InvoiceNo,
+                InvoiceNo = invoiceHNo.InvoiceNo,
                 Item = invoiceD.Item,
                 Qty = invoiceD.Qty,
                 Rate = invoiceD.Rate,
             };
+
+            invoiceHNo.TotalAmount += invoiceD.Qty * invoiceD.Rate;
 
             _invoiceInterface.AddInvoiceD(invoice);
             await _invoiceInterface.SaveAllAsync();
 
             return Ok(invoice);
         }
+
 
         [HttpPut("invoiceH")]
         public async Task<ActionResult<TblInvoiceH>> UpdateTblH(TblInvoiceH tblInvoiceH)
@@ -103,6 +113,40 @@ namespace API.Controllers
             _invoiceInterface.UpdateTblH(exisitingInvoice);
             await _invoiceInterface.SaveAllAsync();
             return Ok(exisitingInvoice);
+        }
+
+        [HttpDelete("invoiceD/{id}")]
+        public async Task<ActionResult> DeleteInvoiceD(int id)
+        {
+            var existingInvoice = await _invoiceInterface.GetInvoiceD(id);
+            if (existingInvoice == null)
+            {
+                return NotFound("Unable to find the invoice");
+            }
+
+            var invoiceHNo = await _invoiceInterface.GetInvoiceH(existingInvoice.InvoiceNo);
+            if (invoiceHNo == null)
+            {
+                return NotFound("Invoice No not found");
+            }
+
+            invoiceHNo.TotalAmount -= existingInvoice.Qty * existingInvoice.Rate;
+
+            _invoiceInterface.DeleteInvoiceD(existingInvoice);
+            await _invoiceInterface.SaveAllAsync();
+
+            return NoContent();
+        }
+
+        [HttpGet("totalAmount/{id}")]
+        public async Task<ActionResult<int>> GetTotalAmount(string id)
+        {
+            var invoiceHNo = await _invoiceInterface.GetInvoiceH(id);
+            if (invoiceHNo == null)
+            {
+                return NotFound("Invoice No not found");
+            }
+            return invoiceHNo.TotalAmount;
         }
     }
 }
